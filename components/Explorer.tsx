@@ -15,6 +15,7 @@ import { ReligionsView } from "./ReligionsView";
 import { LiveView } from "./LiveView";
 import { AccountMenu } from "./AccountMenu";
 import { focusEvent } from "@/lib/focus";
+import { isStaticExport } from "@/lib/config";
 
 const MapView = dynamic(() => import("./MapView").then((m) => m.MapView), { ssr: false, loading: () => <Loading label="Loading map…" /> });
 
@@ -88,7 +89,7 @@ export function Explorer({ initialView }: { initialView?: View }) {
         </nav>
         <div className="flex-1" />
         {data && <SearchBox data={data} />}
-        <Link href="/ask" className="hidden rounded-full border border-[#c084fc55] px-3 py-1 text-sm text-[#e9d5ff] hover:bg-[#c084fc22] md:block">Ask Echoes</Link>
+        {!isStaticExport && <Link href="/ask" className="hidden rounded-full border border-[#c084fc55] px-3 py-1 text-sm text-[#e9d5ff] hover:bg-[#c084fc22] md:block">Ask Echoes</Link>}
         <Link href="/credits" className="hidden text-sm text-muted hover:text-white xl:block">Sources &amp; licences</Link>
         <AccountMenu />
       </header>

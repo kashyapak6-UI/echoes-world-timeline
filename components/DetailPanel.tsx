@@ -13,6 +13,8 @@ import { explainImpact } from "@/lib/ai";
 import { useMe } from "@/lib/useMe";
 import { RelatedNews } from "./RelatedNews";
 import { SourceLinks } from "./SourceLinks";
+import { isStaticExport } from "@/lib/config";
+import { StaticNote } from "./StaticUnavailable";
 
 const LOC_SRC: Record<string, string> = { P625: "event coordinates", P276: "location's coordinates", P36: "capital's coordinates", P17: "country's coordinates (approximate)", P740: "place of formation", P19: "place of birth", P131: "administrative area" };
 const RK_LABEL: Record<string, string> = { origin: "Origin of the religion", founder: "Founder (Wikidata P112)", figure: "Religious figure (birth – death)", scripture: "Scripture / religious text", site: "Place of worship (founded)", event: "Religious event / institution" };
@@ -134,6 +136,10 @@ export function DetailPanel({ data, id }: { data: Dataset; id: string }) {
             </>
           )}
           <div className="mt-3 rounded-lg border border-[#c084fc33] p-2 text-[12px]">
+            {isStaticExport ? (
+              <StaticNote>Explain impact (AI) needs the local Echoes server, where you can sign in and connect your own API key. It isn’t available on this GitHub Pages demo. The recorded Wikidata ripple above still works.</StaticNote>
+            ) : (
+              <>
             <button onClick={() => explainImpact(data, ev, ripple)} disabled={ai?.status === "loading"} className="flex items-center gap-1.5 rounded-full bg-[#c084fc22] px-3 py-1 text-[#e9d5ff] hover:bg-[#c084fc33] disabled:opacity-50">
               <Sparkles size={12} /> {ai?.status === "loading" ? "Asking your AI…" : "Explain impact (AI)"}
             </button>
@@ -148,6 +154,8 @@ export function DetailPanel({ data, id }: { data: Dataset; id: string }) {
                 {ai.summary && <p className="mt-1 text-[12px] text-[#e9d5ff]">{ai.summary}</p>}
                 <div className="mt-1 text-[10px] text-muted">Grounding sources: {(ai.sources ?? []).map((s, i) => <a key={i} href={s.url} {...A} className="mr-2 underline">{s.label}</a>)} + the recorded Wikidata links listed above</div>
               </div>
+            )}
+              </>
             )}
           </div>
         </Section>

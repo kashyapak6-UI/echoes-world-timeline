@@ -8,6 +8,11 @@ npm install
 npm run dev          # http://localhost:3000
 npm run build && npm start
 ```
+
+Live demo (static GitHub Pages): https://kashyapak6-ui.github.io/echoes-world-timeline/
+
+The Pages build (`npm run build:static`, used by `.github/workflows/pages.yml`) is a static export. Timeline, map, patterns, religions, sources and the Wikidata impact ripple all work there. Accounts, Ask Echoes, Explain impact (AI), Live news and earthquake layers need the local server above — they show a short note on the demo instead of erroring. `npm run dev` / `npm run build` are unchanged.
+
 Data is already built into `public/data/`. To refresh it from the live sources (≈10 min):
 ```bash
 rm -rf data/raw/ids-* data/raw/details.json data/raw/relations.json data/raw/external-labels.json data/raw/wikipedia-extracts.json

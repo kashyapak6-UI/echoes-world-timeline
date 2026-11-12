@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, KeyRound, ShieldCheck, Trash2, XCircle } from "lucide-react";
 import { PROVIDERS, providerById } from "@/lib/providers";
 import { useMe } from "@/lib/useMe";
+import { isStaticExport } from "@/lib/config";
+import { StaticUnavailablePage } from "./StaticUnavailable";
 
 export function ProfileView() {
   const router = useRouter();
@@ -15,8 +17,9 @@ export function ProfileView() {
   const [apiKey, setApiKey] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  useEffect(() => { if (loaded && !user) router.replace("/login?next=/profile"); }, [loaded, user, router]);
+  useEffect(() => { if (isStaticExport) return; if (loaded && !user) router.replace("/login?next=/profile"); }, [loaded, user, router]);
   useEffect(() => { if (user?.key) { setProvider(user.key.provider); setModel(user.key.model); setBaseUrl(user.key.provider === "custom" ? user.key.baseUrl : ""); } }, [user?.key]);
+  if (isStaticExport) return <StaticUnavailablePage feature="Profile" />;
   if (!user) return <main className="grid min-h-dvh place-items-center bg-ink text-muted">Loading…</main>;
   const p = providerById(provider)!;
   const k = user.key;

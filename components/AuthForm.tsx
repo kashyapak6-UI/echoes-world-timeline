@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useMeStore } from "@/lib/useMe";
+import { isStaticExport } from "@/lib/config";
+import { StaticUnavailablePage } from "./StaticUnavailable";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
@@ -24,6 +26,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     } finally { setBusy(false); }
   };
   const field = "mt-1 w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-white outline-none focus:border-gold/60";
+  if (isStaticExport) return <StaticUnavailablePage feature={mode === "login" ? "Sign in" : "Create a profile"} />;
   return (
     <main className="grain grid min-h-dvh place-items-center bg-ink px-5">
       <form onSubmit={submit} className="glass w-full max-w-sm rounded-2xl p-7">

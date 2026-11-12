@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { CountryMeta, Dataset, Edge, EventItem, Meta, ReligionsInfo } from "./types";
+import { asset } from "./config";
 
 let promise: Promise<Dataset> | null = null;
 async function load(): Promise<Dataset> {
   const [events, edges, meta, patterns, countries, religions] = await Promise.all([
-    fetch("/data/events.json").then((r) => r.json()) as Promise<EventItem[]>,
-    fetch("/data/edges.json").then((r) => r.json()) as Promise<Edge[]>,
-    fetch("/data/meta.json").then((r) => r.json()) as Promise<Meta>,
-    fetch("/data/patterns.json").then((r) => r.json()) as Promise<Dataset["patterns"]>,
-    fetch("/data/countries-meta.json").then((r) => r.json()) as Promise<Record<string, CountryMeta>>,
-    fetch("/data/religions.json").then((r) => r.json()) as Promise<ReligionsInfo>,
+    fetch(asset("/data/events.json")).then((r) => r.json()) as Promise<EventItem[]>,
+    fetch(asset("/data/edges.json")).then((r) => r.json()) as Promise<Edge[]>,
+    fetch(asset("/data/meta.json")).then((r) => r.json()) as Promise<Meta>,
+    fetch(asset("/data/patterns.json")).then((r) => r.json()) as Promise<Dataset["patterns"]>,
+    fetch(asset("/data/countries-meta.json")).then((r) => r.json()) as Promise<Record<string, CountryMeta>>,
+    fetch(asset("/data/religions.json")).then((r) => r.json()) as Promise<ReligionsInfo>,
   ]);
   const byId = new Map(events.map((e) => [e.id, e]));
   const adj: Dataset["adj"] = new Map();

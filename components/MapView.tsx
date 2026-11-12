@@ -10,6 +10,7 @@ import { fmtRange, hostOf, wikiRevUrl } from "@/lib/format";
 import type { LiveItem } from "@/lib/live";
 import { computeRipple, DIM_LABEL, EVIDENCE_META, type Ripple } from "@/lib/ripple";
 import { EDGE_META } from "@/lib/edges";
+import { asset, isStaticExport } from "@/lib/config";
 
 // Basemaps: OpenFreeMap (free, no key; map data © OpenStreetMap contributors, ODbL; OpenMapTiles schema)
 // and an offline fallback built from Natural Earth (public domain).
@@ -17,7 +18,7 @@ const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
 const MINIMAL: StyleSpecification = {
   version: 8,
   glyphs: GLYPHS,
-  sources: { land: { type: "geojson", data: "/data/land.geojson", attribution: "Natural Earth (public domain)" } },
+  sources: { land: { type: "geojson", data: asset("/data/land.geojson"), attribution: "Natural Earth (public domain)" } },
   layers: [
     { id: "bg", type: "background", paint: { "background-color": "#07080c" } },
     { id: "land", type: "fill", source: "land", paint: { "fill-color": "#141826" } },
@@ -30,7 +31,7 @@ const BASEMAPS = [
   { id: "minimal", label: "Minimal (offline)", style: MINIMAL as string | StyleSpecification },
 ];
 const FONT = ["Noto Sans Regular"];
-maplibregl.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+maplibregl.setWorkerUrl(asset("/maplibre/maplibre-gl-worker.mjs"));
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 export function MapView({ data }: { data: Dataset }) {
@@ -113,7 +114,7 @@ export function MapView({ data }: { data: Dataset }) {
     });
     map.addSource("links", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
     const empty = { type: "FeatureCollection" as const, features: [] };
-    map.addSource("countries", { type: "geojson", data: "/data/countries.geojson", attribution: "Country shapes: Natural Earth (public domain)" });
+    map.addSource("countries", { type: "geojson", data: asset("/data/countries.geojson"), attribution: "Country shapes: Natural Earth (public domain)" });
     map.addSource("ripple-arcs", { type: "geojson", data: empty });
     map.addSource("ripple-origin", { type: "geojson", data: empty });
     map.addLayer({ id: "ripple-fill", type: "fill", source: "countries", paint: { "fill-color": "#f5c97a", "fill-opacity": 0 } });
@@ -283,6 +284,7 @@ export function MapView({ data }: { data: Dataset }) {
     (map.getSource("live-news") as GeoJSONSource).setData({ type: "FeatureCollection", features: feats });
   }
   useEffect(() => {
+    if (isStaticExport) return;
     if (liveLayers.quakes && !quakes) fetch("/api/live/quakes?feed=4.5_week").then((r) => r.json()).then((j) => { setQuakes(j.items); if (j.error) setLiveErr(j.error); }).catch(() => setLiveErr("USGS unavailable"));
     if (liveLayers.news && !news) fetch("/api/live/news?timespan=1d").then((r) => r.json()).then((j) => { setNews(j.items); if (j.error) setLiveErr(j.error); }).catch(() => setLiveErr("GDELT unavailable"));
   }, [liveLayers, quakes, news]);
@@ -406,10 +408,16 @@ export function MapView({ data }: { data: Dataset }) {
       )}
       <div className="glass absolute right-14 top-14 z-10 w-56 rounded-xl p-3 text-[12px]">
         <div className="text-[10px] uppercase tracking-[.16em] text-muted">Live layers</div>
-        <label className="mt-1.5 flex items-center gap-2"><input type="checkbox" checked={liveLayers.quakes} onChange={(e) => setLiveLayer("quakes", e.target.checked)} className="accent-[#ff7a59]" /><span className="h-2 w-2 rounded-full bg-[#ff7a59]" />Earthquakes M4.5+ · 7 d{liveLayers.quakes && quakes && <span className="ml-auto font-mono text-[10px] text-muted">{quakes.length}</span>}</label>
-        <label className="mt-1 flex items-center gap-2"><input type="checkbox" checked={liveLayers.news} onChange={(e) => setLiveLayer("news", e.target.checked)} className="accent-[#7cf5c4]" /><span className="h-2 w-2 rounded-full bg-[#7cf5c4]" />News · 24 h{liveLayers.news && news && <span className="ml-auto font-mono text-[10px] text-muted">{news.length}</span>}</label>
-        <p className="mt-1.5 text-[10px] leading-snug text-muted">Sources: <a className="underline" href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener noreferrer">USGS</a> · <a className="underline" href="https://www.gdeltproject.org" target="_blank" rel="noopener noreferrer">GDELT</a>. News sits at the outlet’s country. Click a dot for links.</p>
-        {liveErr && <p className="mt-1 text-[10px] text-red-300">{liveErr}</p>}
+        {isStaticExport ? (
+          <p className="mt-1.5 text-[10px] leading-snug text-muted">Live earthquake and news layers need the Echoes server (USGS and GDELT are fetched server-side). Run the project locally to turn them on.</p>
+        ) : (
+          <>
+            <label className="mt-1.5 flex items-center gap-2"><input type="checkbox" checked={liveLayers.quakes} onChange={(e) => setLiveLayer("quakes", e.target.checked)} className="accent-[#ff7a59]" /><span className="h-2 w-2 rounded-full bg-[#ff7a59]" />Earthquakes M4.5+ · 7 d{liveLayers.quakes && quakes && <span className="ml-auto font-mono text-[10px] text-muted">{quakes.length}</span>}</label>
+            <label className="mt-1 flex items-center gap-2"><input type="checkbox" checked={liveLayers.news} onChange={(e) => setLiveLayer("news", e.target.checked)} className="accent-[#7cf5c4]" /><span className="h-2 w-2 rounded-full bg-[#7cf5c4]" />News · 24 h{liveLayers.news && news && <span className="ml-auto font-mono text-[10px] text-muted">{news.length}</span>}</label>
+            <p className="mt-1.5 text-[10px] leading-snug text-muted">Sources: <a className="underline" href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener noreferrer">USGS</a> · <a className="underline" href="https://www.gdeltproject.org" target="_blank" rel="noopener noreferrer">GDELT</a>. News sits at the outlet’s country. Click a dot for links.</p>
+            {liveErr && <p className="mt-1 text-[10px] text-red-300">{liveErr}</p>}
+          </>
+        )}
       </div>
       <div className="glass absolute right-14 top-3 z-10 hidden rounded-xl px-3 py-2 text-[11px] text-muted lg:block">
         Clusters show counts — click to zoom in · halos = events starting near the end of the window

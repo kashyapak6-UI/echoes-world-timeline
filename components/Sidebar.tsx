@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ChevronLeft, SlidersHorizontal } from "lucide-react";
 import type { Dataset } from "@/lib/types";
 import { useStore } from "@/lib/store";
+import { isStaticExport } from "@/lib/config";
 
 export function Sidebar({ data }: { data: Dataset }) {
   const [open, setOpen] = useState(() => typeof window === "undefined" || window.innerWidth >= 900);
@@ -73,7 +74,9 @@ export function Sidebar({ data }: { data: Dataset }) {
 
         <h3 className="mb-2 mt-6 text-[11px] uppercase tracking-[.18em] text-muted">Impact ripple</h3>
         <label className="flex items-center gap-2 text-[12px] text-muted"><input type="checkbox" checked={ripple} onChange={(e) => setRipple(e.target.checked)} className="accent-[#f5c97a]" /> Show ripple when an event is selected</label>
-        <a href="/profile" className="mt-2 block text-[12px] text-[#d8b4fe] underline-offset-2 hover:underline">AI provider for “Explain impact” (profile)…</a>
+        {isStaticExport
+          ? <p className="mt-2 text-[12px] text-muted">“Explain impact” with your own AI key is available when you run Echoes locally.</p>
+          : <a href="/profile" className="mt-2 block text-[12px] text-[#d8b4fe] underline-offset-2 hover:underline">AI provider for “Explain impact” (profile)…</a>}
 
         <h3 className="mb-2 mt-6 text-[11px] uppercase tracking-[.18em] text-muted">Regions</h3>
         <div className="flex flex-wrap gap-1.5">

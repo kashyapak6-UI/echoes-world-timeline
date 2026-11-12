@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { EventItem } from "@/lib/types";
 import { fmtYear } from "@/lib/format";
+import { asset } from "@/lib/config";
 
 function ll2v(lat: number, lon: number, r: number) {
   const phi = ((90 - lat) * Math.PI) / 180, th = ((lon + 180) * Math.PI) / 180;
@@ -68,7 +69,7 @@ export function HeroGlobe({ events, colors }: { events: EventItem[]; colors: Rec
   const [land, setLand] = useState<[number, number][]>([]);
   const [year, setYear] = useState<number | null>(null);
   const lastYear = useRef<number | null>(null);
-  useEffect(() => { fetch("/data/land-dots.json").then((r) => r.json()).then(setLand); }, []);
+  useEffect(() => { fetch(asset("/data/land-dots.json")).then((r) => r.json()).then(setLand); }, []);
   const located = useMemo(() => events.filter((e) => e.ll && e.c !== "era" && e.s >= -3500).sort((a, b) => a.s - b.s), [events]);
   const onYear = (y: number) => {
     const r = Math.round(y / 10) * 10;

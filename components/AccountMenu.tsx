@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { UserRound } from "lucide-react";
 import { useMe } from "@/lib/useMe";
+import { isStaticExport } from "@/lib/config";
 
 export function AccountMenu() {
   const { user, loaded } = useMe();
+  if (isStaticExport) return null;
   if (!loaded) return <span className="h-8 w-8" />;
   if (!user) return <Link href="/login" className="rounded-full border border-line px-3 py-1 text-sm text-muted hover:text-white">Sign in</Link>;
   return (

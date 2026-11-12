@@ -7,6 +7,8 @@ import type { LiveItem, LiveResult, OnThisDayItem } from "@/lib/live";
 import { useStore } from "@/lib/store";
 import { focusEvent } from "@/lib/focus";
 import { LiveRow } from "./LiveLinks";
+import { isStaticExport } from "@/lib/config";
+import { StaticNote } from "./StaticUnavailable";
 
 type Keyed = { id: "newsdata" | "currents" | "guardian"; name: string; configured: boolean; cap: number; used: number; env: string; capEnv: string };
 const A = { target: "_blank", rel: "noopener noreferrer" } as const;
@@ -26,12 +28,13 @@ export function LiveView({ data }: { data: Dataset }) {
   const [keyed, setKeyed] = useState<Keyed[]>([]);
   const [keyedRes, setKeyedRes] = useState<Record<string, LiveResult<LiveItem>>>({});
 
-  useEffect(() => { setOtd(null); fetch(`/api/live/onthisday?m=${date.m}&d=${date.d}`).then((r) => r.json()).then(setOtd).catch(() => {}); }, [date]);
-  useEffect(() => { setQuakes(null); fetch(`/api/live/quakes?feed=${feed}`).then((r) => r.json()).then(setQuakes).catch(() => {}); }, [feed]);
-  const loadNews = (query = q) => { setNewsLoading(true); fetch(`/api/live/news?q=${encodeURIComponent(query)}&timespan=${span}`).then((r) => r.json()).then(setNews).catch(() => {}).finally(() => setNewsLoading(false)); };
+  useEffect(() => { if (isStaticExport) return; setOtd(null); fetch(`/api/live/onthisday?m=${date.m}&d=${date.d}`).then((r) => r.json()).then(setOtd).catch(() => {}); }, [date]);
+  useEffect(() => { if (isStaticExport) return; setQuakes(null); fetch(`/api/live/quakes?feed=${feed}`).then((r) => r.json()).then(setQuakes).catch(() => {}); }, [feed]);
+  const loadNews = (query = q) => { if (isStaticExport) return; setNewsLoading(true); fetch(`/api/live/news?q=${encodeURIComponent(query)}&timespan=${span}`).then((r) => r.json()).then(setNews).catch(() => {}).finally(() => setNewsLoading(false)); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { loadNews(); }, [span]);
   useEffect(() => {
+    if (isStaticExport) return;
     fetch("/api/live/status").then((r) => r.json()).then((j) => {
       setKeyed(j.keyed);
       for (const k of j.keyed as Keyed[]) if (k.configured) fetch(`/api/live/keyed?provider=${k.id}`).then((r) => r.json()).then((x) => setKeyedRes((s) => ({ ...s, [k.id]: x })));
@@ -39,6 +42,25 @@ export function LiveView({ data }: { data: Dataset }) {
   }, []);
   const showOnMap = (k: "quakes" | "news") => { setLiveLayer(k, true); setView("map"); };
   const label = new Date(2000, date.m - 1, date.d).toLocaleDateString(undefined, { day: "numeric", month: "long" });
+
+  if (isStaticExport) {
+    return (
+      <div className="scroll-thin h-full overflow-y-auto px-6 pb-16 pt-6 md:px-10">
+        <div className="max-w-3xl">
+          <p className="text-[11px] uppercase tracking-[.2em] text-gold">Live</p>
+          <h1 className="mt-1 font-display text-5xl leading-none">History, still being written.</h1>
+          <p className="mt-3 text-[14px] leading-relaxed text-muted">
+            Wikipedia On this day, GDELT world news and USGS earthquakes are fetched through the Echoes server, so they aren’t available on this static GitHub Pages demo.
+          </p>
+          <div className="mt-6 max-w-xl">
+            <StaticNote>
+              Run the project locally with <code className="text-white">npm run dev -- -p 3010</code> to use the Live tab, map live layers, and related news. The timeline, map, patterns, religions, sources and impact ripple (from Wikidata) all work here.
+            </StaticNote>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="scroll-thin h-full overflow-y-auto px-6 pb-16 pt-6 md:px-10">

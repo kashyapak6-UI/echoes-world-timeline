@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Sparkles } from "lucide-react";
 import type { Citation } from "@/lib/citations";
 import { useMe } from "@/lib/useMe";
+import { isStaticExport } from "@/lib/config";
+import { StaticUnavailablePage } from "./StaticUnavailable";
 
 type Turn = { q: string; a: string; sources: Citation[]; notes: string[]; model?: string; error?: string; done: boolean };
 const KIND: Record<Citation["kind"], { label: string; color: string }> = {
@@ -48,6 +50,7 @@ export function AskView() {
   };
 
   const gate = loaded && (!user ? "login" : !user.key ? "key" : null);
+  if (isStaticExport) return <StaticUnavailablePage feature="Ask Echoes" />;
   return (
     <main className="grain flex h-dvh flex-col bg-ink">
       <header className="flex h-14 shrink-0 items-center gap-4 border-b border-line px-5">

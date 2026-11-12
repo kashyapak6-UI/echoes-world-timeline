@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import type { LiveItem, LiveResult } from "@/lib/live";
 import { LiveRow } from "./LiveLinks";
+import { isStaticExport } from "@/lib/config";
+import { StaticNote } from "./StaticUnavailable";
 
 type R = { query: string; results: LiveResult<LiveItem>[] };
 const memo = new Map<string, R>();
@@ -9,6 +11,7 @@ export function RelatedNews({ id }: { id: string }) {
   const [r, setR] = useState<R | null>(memo.get(id) ?? null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    if (isStaticExport) return;
     if (memo.has(id)) { setR(memo.get(id)!); return; }
     setR(null); setLoading(true);
     const ac = new AbortController();
@@ -17,6 +20,14 @@ export function RelatedNews({ id }: { id: string }) {
     }, 600); // debounce quick clicking (GDELT allows ~1 request / 5 s)
     return () => { clearTimeout(t); ac.abort(); };
   }, [id]);
+  if (isStaticExport) {
+    return (
+      <section className="mt-6 border-t border-line pt-4">
+        <div className="mb-2 flex items-baseline justify-between"><h3 className="text-[12px] uppercase tracking-[.16em] text-white">Related live news</h3><span className="text-[10px] text-muted">GDELT · last 3 months</span></div>
+        <StaticNote>Live news needs the Echoes server (GDELT is fetched and cached server-side). Run the project locally to search recent coverage. The event’s sources above still link to Wikipedia and Wikidata.</StaticNote>
+      </section>
+    );
+  }
   const items = r?.results.flatMap((x) => x.items) ?? [];
   return (
     <section className="mt-6 border-t border-line pt-4">
