@@ -1,0 +1,1 @@
+export type Citation = { n: number; kind: "event" | "news" | "onthisday"; title: string; url: string; outlet?: string; date?: string; wikidata?: string; eventId?: string; provider?: string; text?: string };

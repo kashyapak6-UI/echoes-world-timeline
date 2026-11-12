@@ -1,0 +1,132 @@
+{
+ "at": "2026-11-10T17:16:42.311Z",
+ "pass": 25,
+ "total": 25,
+ "results": [
+  {
+   "name": "anonymous /me is null",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "signup rejects short password",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "signup creates account + session",
+   "ok": true,
+   "info": "cookie flags: Path, HttpOnly, SameSite, Expires"
+  },
+  {
+   "name": "session cookie is HttpOnly + SameSite=Lax",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "cross-origin POST blocked",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "save key (custom OpenAI-compatible)",
+   "ok": true,
+   "info": "masked=••••wxyz"
+  },
+  {
+   "name": "GET key returns masked only",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "test connection via server → mock",
+   "ok": true,
+   "info": "Connected — model replied “ok”"
+  },
+  {
+   "name": "Explain impact uses stored key",
+   "ok": true,
+   "info": "India, Pakistan; sources: https://en.wikipedia.org/w/index.php?title=Partition_of_India&oldid=1376809023 https://www.wikidata.org/wiki/Q129053"
+  },
+  {
+   "name": "chat streams NDJSON deltas",
+   "ok": true,
+   "info": "36 deltas, first after 17990 ms, total 18894 ms"
+  },
+  {
+   "name": "chat answer cites sources that exist with URLs",
+   "ok": true,
+   "info": "cited 1,2,3; 14 sources (8 events, 6 news)"
+  },
+  {
+   "name": "bad key: test fails cleanly",
+   "ok": true,
+   "info": "Provider returned HTTP 401: invalid api key"
+  },
+  {
+   "name": "replace key",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "update model keeps stored key",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "store has no plaintext key or password",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "stored key is AES-256-GCM sealed (iv/tag/ct) + last4",
+   "ok": true,
+   "info": "iv 12 B, tag 16 B"
+  },
+  {
+   "name": "password stored as scrypt hash",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": ".env.local has auto-generated ECHOES_SECRET",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "delete key",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "chat without key → 400",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "logout clears session",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "AI without session → 401",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "wrong password → 401",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "login works",
+   "ok": true,
+   "info": ""
+  },
+  {
+   "name": "full key never appeared in ANY response",
+   "ok": true,
+   "info": ""
+  }
+ ]
+}

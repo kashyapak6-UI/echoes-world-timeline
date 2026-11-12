@@ -1,0 +1,222 @@
+{
+ "generatedAt": "2026-11-10T16:39:24.330Z",
+ "fetchedAt": "2026-11-10T16:37:14.075Z",
+ "counts": {
+  "events": 3841,
+  "rippleEvents": 2733,
+  "withRefs": 2342,
+  "withCountry": 3204,
+  "faith": 332,
+  "edges": 8451,
+  "withCoords": 3278,
+  "withExtract": 3826,
+  "sharedEdges": 3868,
+  "candidates": 5407,
+  "noDate": 260,
+  "outOfRange": 21,
+  "noLabel": 7,
+  "techExcluded": 199,
+  "multiLocation": 200
+ },
+ "edgeTypes": {
+  "cause": 124,
+  "part": 1002,
+  "sequence": 524,
+  "involves": 2933,
+  "shared": 3868
+ },
+ "span": {
+  "first": -10000,
+  "last": 2026.839
+ },
+ "categories": [
+  {
+   "id": "war",
+   "label": "Wars",
+   "color": "#ef4444",
+   "span": false,
+   "n": 562
+  },
+  {
+   "id": "battle",
+   "label": "Battles & sieges",
+   "color": "#f97316",
+   "span": false,
+   "n": 344
+  },
+  {
+   "id": "revolution",
+   "label": "Revolutions, revolts & coups",
+   "color": "#eab308",
+   "span": false,
+   "n": 363
+  },
+  {
+   "id": "pandemic",
+   "label": "Pandemics & epidemics",
+   "color": "#22c55e",
+   "span": false,
+   "n": 174
+  },
+  {
+   "id": "famine",
+   "label": "Famines & droughts",
+   "color": "#a3e635",
+   "span": false,
+   "n": 82
+  },
+  {
+   "id": "financial",
+   "label": "Financial crises & crashes",
+   "color": "#06b6d4",
+   "span": false,
+   "n": 80
+  },
+  {
+   "id": "disaster",
+   "label": "Natural disasters",
+   "color": "#3b82f6",
+   "span": false,
+   "n": 295
+  },
+  {
+   "id": "migration",
+   "label": "Migrations & displacements",
+   "color": "#8b5cf6",
+   "span": false,
+   "n": 60
+  },
+  {
+   "id": "atrocity",
+   "label": "Genocides & massacres",
+   "color": "#be123c",
+   "span": false,
+   "n": 155
+  },
+  {
+   "id": "treaty",
+   "label": "Treaties & peace deals",
+   "color": "#14b8a6",
+   "span": false,
+   "n": 242
+  },
+  {
+   "id": "assassination",
+   "label": "Assassinations",
+   "color": "#f43f5e",
+   "span": false,
+   "n": 45
+  },
+  {
+   "id": "partition",
+   "label": "Partitions & border changes",
+   "color": "#fda4af",
+   "span": false,
+   "n": 8
+  },
+  {
+   "id": "religion",
+   "label": "Schisms & persecutions",
+   "color": "#d946ef",
+   "span": false,
+   "n": 65
+  },
+  {
+   "id": "empire",
+   "label": "Empires & states (rise / fall)",
+   "color": "#f59e0b",
+   "span": true,
+   "n": 463
+  },
+  {
+   "id": "dynasty",
+   "label": "Dynasties",
+   "color": "#fb923c",
+   "span": true,
+   "n": 137
+  },
+  {
+   "id": "era",
+   "label": "Eras & periods",
+   "color": "#94a3b8",
+   "span": true,
+   "n": 142
+  },
+  {
+   "id": "tech",
+   "label": "Inventions & discoveries",
+   "color": "#0ea5e9",
+   "span": false,
+   "n": 292
+  },
+  {
+   "id": "faith",
+   "label": "Religions: origins, figures, texts",
+   "color": "#e2b0ff",
+   "span": false,
+   "n": 332
+  }
+ ],
+ "regions": [
+  {
+   "id": "eu",
+   "label": "Europe"
+  },
+  {
+   "id": "mena",
+   "label": "Middle East & N. Africa"
+  },
+  {
+   "id": "ssa",
+   "label": "Sub-Saharan Africa"
+  },
+  {
+   "id": "sa",
+   "label": "South Asia"
+  },
+  {
+   "id": "ca",
+   "label": "Central & North Asia"
+  },
+  {
+   "id": "ea",
+   "label": "East Asia"
+  },
+  {
+   "id": "sea",
+   "label": "Southeast Asia & Oceania"
+  },
+  {
+   "id": "na",
+   "label": "North America"
+  },
+  {
+   "id": "la",
+   "label": "Latin America & Caribbean"
+  },
+  {
+   "id": "gl",
+   "label": "Global / multi-region"
+  }
+ ],
+ "sources": [
+  {
+   "name": "Wikidata",
+   "url": "https://www.wikidata.org",
+   "licence": "CC0 1.0",
+   "use": "event items, dates, coordinates, classes, relations"
+  },
+  {
+   "name": "Wikipedia (English)",
+   "url": "https://en.wikipedia.org",
+   "licence": "CC BY-SA 4.0",
+   "use": "intro extracts (first 3 sentences)"
+  },
+  {
+   "name": "Natural Earth",
+   "url": "https://www.naturalearthdata.com",
+   "licence": "Public domain",
+   "use": "land outline, country polygons and centroids (impact ripple)"
+  }
+ ]
+}
